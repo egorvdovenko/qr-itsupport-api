@@ -5,12 +5,15 @@ const getAllDevices = async (req, res) => {
     const { page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
 
-    const devices = await Device.findAll({
+    const { count, rows: devices } = await Device.findAndCountAll({
       limit: parseInt(pageSize),
       offset: parseInt(offset),
     });
 
-    res.json(devices);
+    res.json({
+      totalItems: count,
+      items: devices,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -33,9 +36,9 @@ const getDeviceById = async (req, res) => {
 };
 
 const createDevice = async (req, res) => {
-  const { name } = req.body;
+  const { title, inn } = req.body;
   try {
-    const newDevice = await Device.create({ name });
+    const newDevice = await Device.create({ title, inn });
     res.status(201).json(newDevice);
   } catch (err) {
     console.error(err);
@@ -45,11 +48,12 @@ const createDevice = async (req, res) => {
 
 const updateDevice = async (req, res) => {
   const deviceId = parseInt(req.params.id);
-  const { name } = req.body;
+  const { title, inn } = req.body;
   try {
     const device = await Device.findByPk(deviceId);
     if (device) {
-      device.name = name;
+      device.title = title;
+      device.inn = inn;
       await device.save();
       res.json(device);
     } else {
