@@ -6,6 +6,7 @@ const { sequelize } = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const deviceRoutes = require('./routes/deviceRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', deviceRoutes);
+app.use('/api', documentRoutes);
 
 // Initialize the database
 async function initializeDatabase() {
