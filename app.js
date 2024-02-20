@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 // const https = require('https');
-const fs = require('fs');
+// const fs = require('fs');
 const { sequelize } = require('./config/database');
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const deviceRoutes = require('./routes/deviceRoutes');
 
@@ -15,7 +16,7 @@ app.use(cors());
 // Middleware for handling JSON
 app.use(express.json());
 
-// Routes for managing users
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', deviceRoutes);
 
@@ -40,7 +41,11 @@ initializeDatabase();
 // const server = https.createServer(options, app);
 
 // Start the server
-app.listen(port, () => {
 // server.listen(port, () => {
-  console.log(`Server is running on https://localhost:${port}`);
+//   console.log(`Server is running on https://localhost:${port}`);
+// });
+
+// Start the app
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
