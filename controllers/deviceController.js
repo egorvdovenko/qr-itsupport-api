@@ -35,10 +35,29 @@ const getDeviceById = async (req, res) => {
   }
 };
 
-const createDevice = async (req, res) => {
-  const { title, inn } = req.body;
+const getDeviceByInventoryNumber = async (req, res) => {
   try {
-    const newDevice = await Device.create({ title, inn });
+    const inventoryNumber = req.params.inventoryNumber;
+
+    const device = await Device.findOne({
+      where: { inventoryNumber },
+    });
+
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
+    }
+
+    res.json(device);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const createDevice = async (req, res) => {
+  const { title, inventoryNumber, location } = req.body;
+  try {
+    const newDevice = await Device.create({ title, inventoryNumber, location });
     res.status(201).json(newDevice);
   } catch (err) {
     console.error(err);
@@ -48,12 +67,13 @@ const createDevice = async (req, res) => {
 
 const updateDevice = async (req, res) => {
   const deviceId = parseInt(req.params.id);
-  const { title, inn } = req.body;
+  const { title, inventoryNumber, location } = req.body;
   try {
     const device = await Device.findByPk(deviceId);
     if (device) {
       device.title = title;
-      device.inn = inn;
+      device.inventoryNumber = inventoryNumber;
+      device.location = location
       await device.save();
       res.json(device);
     } else {
@@ -84,6 +104,7 @@ const deleteDevice = async (req, res) => {
 module.exports = {
   getAllDevices,
   getDeviceById,
+  getDeviceByInventoryNumber,
   createDevice,
   updateDevice,
   deleteDevice,
