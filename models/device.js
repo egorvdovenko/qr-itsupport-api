@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
+const Ticket = require('./ticket');
 
 const Device = sequelize.define('Device', {
   id: {
@@ -11,10 +12,17 @@ const Device = sequelize.define('Device', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  inn: {
+  inventoryNumber: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 });
+
+Device.hasMany(Ticket, { foreignKey: "deviceId", as: "tickets" });
+Ticket.belongsTo(Device, { foreignKey: "deviceId", as: "device" });
 
 module.exports = Device;
