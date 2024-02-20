@@ -26,9 +26,9 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { name } = req.body;
+  const { name, email } = req.body;
   try {
-    const newUser = await User.create({ name });
+    const newUser = await User.create({ name, email });
     res.status(201).json(newUser);
   } catch (err) {
     console.error(err);
@@ -38,11 +38,12 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = parseInt(req.params.id);
-  const { name } = req.body;
+  const { name, email } = req.body;
   try {
     const user = await User.findByPk(userId);
     if (user) {
       user.name = name;
+      user.email = email
       await user.save();
       res.json(user);
     } else {
