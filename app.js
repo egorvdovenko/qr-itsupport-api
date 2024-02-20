@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const deviceRoutes = require('./routes/deviceRoutes');
 const documentRoutes = require('./routes/documentRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -21,6 +22,7 @@ app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', deviceRoutes);
 app.use('/api', documentRoutes);
+app.use('/api', ticketRoutes);
 
 // Initialize the database
 async function initializeDatabase() {
