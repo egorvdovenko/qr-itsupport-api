@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
-    "serve": "nodemon ./app.js"
+    "serve": "nodemon ./app.js",
+    "db:seed:all": "npx sequelize-cli db:seed:all",
+    "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all"
   },
   "repository": {
     "type": "git",
