@@ -1,28 +1,27 @@
 const express = require('express');
 const cors = require('cors');
-// const https = require('https');
-// const fs = require('fs');
+
 const { sequelize } = require('./config/database');
+
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const deviceRoutes = require('./routes/deviceRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Middleware for CORS
 app.use(cors());
-
-// Middleware for handling JSON
 app.use(express.json());
 
-app.use('/api', authRoutes);
-app.use('/api', userRoutes);
-app.use('/api', deviceRoutes);
-app.use('/api', documentRoutes);
-app.use('/api', ticketRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/devices', deviceRoutes);
+app.use('/api/documents', documentRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 // Initialize the database
 async function initializeDatabase() {
@@ -36,20 +35,6 @@ async function initializeDatabase() {
 
 initializeDatabase();
 
-// Create HTTPS server
-// const options = {
-//   key: fs.readFileSync('./private-key.pem'),
-//   cert: fs.readFileSync('./certificate.pem'),
-// };
-
-// const server = https.createServer(options, app);
-
-// Start the server
-// server.listen(port, () => {
-//   console.log(`Server is running on https://localhost:${port}`);
-// });
-
-// Start the app
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
