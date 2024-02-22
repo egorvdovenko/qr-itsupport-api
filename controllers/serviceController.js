@@ -20,7 +20,6 @@ const getAllServices = async (req, res) => {
   }
 };
 
-
 const getServiceById = async (req, res) => {
   try {
     const serviceId = parseInt(req.params.id);
