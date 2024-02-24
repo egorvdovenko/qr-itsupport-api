@@ -4,10 +4,21 @@ const Device = require('../models/device');
 
 const getAllTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.findAll({ include: ['documents', 'device'] });
-    res.json(tickets);
-  } catch (err) {
-    console.error(err);
+    const { page = 1, pageSize = 10 } = req.query;
+    const offset = (page - 1) * pageSize;
+
+    const { count, rows: tickets } = await Ticket.findAndCountAll({
+      include: ['documents', 'device'],
+      limit: parseInt(pageSize),
+      offset: parseInt(offset),
+    });
+
+    res.json({
+      totalItems: count,
+      items: tickets,
+    });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

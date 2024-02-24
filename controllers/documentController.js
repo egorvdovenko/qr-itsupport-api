@@ -2,13 +2,24 @@ const Document = require('../models/document');
 
 const getAllDocuments = async (req, res) => {
   try {
-    const documents = await Document.findAll();
-    res.json(documents);
-  } catch (err) {
-    console.error(err);
+    const { page = 1, pageSize = 10 } = req.query;
+    const offset = (page - 1) * pageSize;
+
+    const { count, rows: documents } = await Document.findAndCountAll({
+      limit: parseInt(pageSize),
+      offset: parseInt(offset),
+    });
+
+    res.json({
+      totalItems: count,
+      items: documents,
+    });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 const createDocument = async (req, res) => {
   try {
