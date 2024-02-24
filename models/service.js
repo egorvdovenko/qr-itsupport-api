@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../sequelize');
+const User = require('./user');
 
 const Service = sequelize.define('Service', {
   id: {
@@ -16,5 +17,8 @@ const Service = sequelize.define('Service', {
     allowNull: false,
   },
 });
+
+Service.hasMany(User, { foreignKey: 'serviceId', as: 'users' });
+User.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
 
 module.exports = Service;

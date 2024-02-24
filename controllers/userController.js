@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Ticket = require('../models/ticket');
+const Service = require('../models/service'); // Replace with the correct path for Service model
 
 const getAllUsers = async (req, res) => {
   try {
@@ -6,6 +8,10 @@ const getAllUsers = async (req, res) => {
     const offset = (page - 1) * pageSize;
 
     const { count, rows: users } = await User.findAndCountAll({
+      include: [
+        { model: Ticket, as: 'tickets' },
+        { model: Service, as: 'service' },
+      ],
       limit: parseInt(pageSize),
       offset: parseInt(offset),
     });
@@ -23,7 +29,12 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [
+        { model: Ticket, as: 'tickets' },
+        { model: Service, as: 'service' },
+      ],
+    });
     if (user) {
       res.json(user);
     } else {
@@ -36,9 +47,21 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { name, email, phoneNumber, city, isConfirmed } = req.body;
+  const { email, phoneNumber, isConfirmed, serviceId } = req.body;
   try {
-    const newUser = await User.create({ name, email, phoneNumber, city, isConfirmed });
+    const newUser = await User.create({
+      email,
+      phoneNumber,
+      isConfirmed,
+    });
+
+    if (serviceId) {
+      const service = await Service.findByPk(serviceId);
+      if (service) {
+        await newUser.setService(service);
+      }
+    }
+
     res.status(201).json(newUser);
   } catch (err) {
     console.error(err);
@@ -48,16 +71,22 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = parseInt(req.params.id);
-  const { name, email, phoneNumber, city, isConfirmed } = req.body;
+  const { email, phoneNumber, isConfirmed, serviceId } = req.body;
   try {
     const user = await User.findByPk(userId);
     if (user) {
-      user.name = name;
       user.email = email;
       user.phoneNumber = phoneNumber;
-      user.city = city;
       user.isConfirmed = isConfirmed;
       await user.save();
+
+      if (serviceId) {
+        const service = await Service.findByPk(serviceId);
+        if (service) {
+          await user.setService(service);
+        }
+      }
+
       res.json(user);
     } else {
       res.status(404).json({ error: 'User not found' });

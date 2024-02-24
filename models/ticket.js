@@ -23,7 +23,7 @@ const Ticket = sequelize.define('Ticket', {
   },
 });
 
-Ticket.hasMany(Document, { foreignKey: "ticketId", as: "documents" });
-Document.belongsTo(Ticket, { foreignKey: "ticketId", as: "ticket" });
+Ticket.hasMany(Document, { foreignKey: 'ticketId', as: 'documents' });
+Document.belongsTo(Ticket, { foreignKey: 'ticketId', as: 'ticket' });
 
 module.exports = Ticket;
