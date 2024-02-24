@@ -16,6 +16,11 @@ const Ticket = sequelize.define('Ticket', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  isDone: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 });
 
 Ticket.hasMany(Document, { foreignKey: "ticketId", as: "documents" });
