@@ -9,10 +9,16 @@ module.exports = {
       {
         email: 'user1@example.com',
         password: await bcrypt.hash('password1', 10),
+        phoneNumber: '1234567890', // Add the phoneNumber
+        city: 'City1', // Add the city
+        isConfirmed: true, // Add the isConfirmed
       },
       {
         email: 'user2@example.com',
         password: await bcrypt.hash('password2', 10),
+        phoneNumber: '9876543210', // Add the phoneNumber
+        city: 'City2', // Add the city
+        isConfirmed: false, // Add the isConfirmed
       },
     ]);
   },

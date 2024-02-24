@@ -36,9 +36,9 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { name, email, phoneNumber, city } = req.body;
+  const { name, email, phoneNumber, city, isConfirmed } = req.body;
   try {
-    const newUser = await User.create({ name, email, phoneNumber, city });
+    const newUser = await User.create({ name, email, phoneNumber, city, isConfirmed });
     res.status(201).json(newUser);
   } catch (err) {
     console.error(err);
@@ -48,7 +48,7 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = parseInt(req.params.id);
-  const { name, email, phoneNumber, city } = req.body;
+  const { name, email, phoneNumber, city, isConfirmed } = req.body;
   try {
     const user = await User.findByPk(userId);
     if (user) {
@@ -56,6 +56,7 @@ const updateUser = async (req, res) => {
       user.email = email;
       user.phoneNumber = phoneNumber;
       user.city = city;
+      user.isConfirmed = isConfirmed;
       await user.save();
       res.json(user);
     } else {
