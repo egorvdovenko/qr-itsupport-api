@@ -8,6 +8,7 @@ const getAllUsers = async (req, res) => {
     const offset = (page - 1) * pageSize;
 
     const { count, rows: users } = await User.findAndCountAll({
+      attributes: { exclude: ['password'] }, // Exclude the 'password' field
       include: [
         { model: Ticket, as: 'tickets' },
         { model: Service, as: 'service' },
@@ -30,6 +31,7 @@ const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await User.findByPk(userId, {
+      attributes: { exclude: ['password'] }, // Exclude the 'password' field
       include: [
         { model: Ticket, as: 'tickets' },
         { model: Service, as: 'service' },
