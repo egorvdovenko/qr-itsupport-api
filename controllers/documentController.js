@@ -20,7 +20,6 @@ const getAllDocuments = async (req, res) => {
   }
 };
 
-
 const createDocument = async (req, res) => {
   try {
     const { title, base64String } = req.body;
