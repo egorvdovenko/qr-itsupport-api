@@ -60,7 +60,6 @@ const updateDocument = async (req, res) => {
       return res.status(404).json({ error: 'Document not found' });
     }
 
-    // Update document fields
     document.title = title;
     document.base64String = base64String;
     await document.save();
@@ -81,7 +80,6 @@ const deleteDocument = async (req, res) => {
       return res.status(404).json({ error: 'Document not found' });
     }
 
-    // Delete document
     await document.destroy();
 
     res.json({ message: 'Document deleted successfully' });

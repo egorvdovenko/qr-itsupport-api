@@ -6,7 +6,6 @@ const registerUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({

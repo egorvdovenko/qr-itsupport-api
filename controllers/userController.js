@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const Ticket = require('../models/ticket');
-const Service = require('../models/service'); // Replace with the correct path for Service model
+const Service = require('../models/service');
 
 const getAllUsers = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ const getAllUsers = async (req, res) => {
     const offset = (page - 1) * pageSize;
 
     const { count, rows: users } = await User.findAndCountAll({
-      attributes: { exclude: ['password'] }, // Exclude the 'password' field
+      attributes: { exclude: ['password'] },
       include: [
         { model: Ticket, as: 'tickets' },
         { model: Service, as: 'service' },
@@ -31,7 +31,7 @@ const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] }, // Exclude the 'password' field
+      attributes: { exclude: ['password'] },
       include: [
         { model: Ticket, as: 'tickets' },
         { model: Service, as: 'service' },

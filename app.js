@@ -23,7 +23,6 @@ app.use('/api/devices', deviceRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/tickets', ticketRoutes);
 
-// Initialize the database
 async function initializeDatabase() {
   try {
     await sequelize.sync(); // Remove force: true, unless you want to drop and recreate tables on every restart

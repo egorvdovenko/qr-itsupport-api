@@ -61,7 +61,6 @@ const updateService = async (req, res) => {
       return res.status(404).json({ error: 'Service not found' });
     }
 
-    // Update service fields
     service.city = city;
     service.phoneNumber = phoneNumber;
     await service.save();
@@ -82,7 +81,6 @@ const deleteService = async (req, res) => {
       return res.status(404).json({ error: 'Service not found' });
     }
 
-    // Delete service
     await service.destroy();
 
     res.json({ message: 'Service deleted successfully' });
