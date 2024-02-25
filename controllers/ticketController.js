@@ -41,7 +41,13 @@ const getTicketById = async (req, res) => {
 
 const createTicket = async (req, res) => {
   try {
-    const { title, description, deviceId, documents, isDone } = req.body;
+    const { title, description, deviceId, documents, isDone, userId } = req.body;
+
+    // Check if the user with the given userId exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
     // Check if the device with the given deviceId exists
     const device = await Device.findByPk(deviceId);
@@ -49,12 +55,12 @@ const createTicket = async (req, res) => {
       return res.status(404).json({ error: 'Device not found' });
     }
 
-    // Create a new ticket with associated device
     const newTicket = await Ticket.create({
       title,
       description,
       deviceId,
-      isDone: !!isDone, // Convert isDone to a boolean
+      isDone: !!isDone,
+      userId,
     });
 
     // Create associated documents
@@ -77,7 +83,13 @@ const createTicket = async (req, res) => {
 const updateTicket = async (req, res) => {
   try {
     const ticketId = parseInt(req.params.id);
-    const { title, description, deviceId, documents, isDone } = req.body;
+    const { title, description, deviceId, documents, isDone, userId } = req.body;
+
+    // Check if the user with the given userId exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
     // Check if the device with the given deviceId exists
     const device = await Device.findByPk(deviceId);
@@ -91,11 +103,11 @@ const updateTicket = async (req, res) => {
       return res.status(404).json({ error: 'Ticket not found' });
     }
 
-    // Update ticket fields
     ticket.title = title;
     ticket.description = description;
     ticket.deviceId = deviceId;
-    ticket.isDone = !!isDone; // Convert isDone to a boolean
+    ticket.isDone = !!isDone;
+    ticket.userId = userId;
     await ticket.save();
 
     // Update associated documents
@@ -129,7 +141,6 @@ const deleteTicket = async (req, res) => {
     // Delete associated documents before deleting the ticket
     await Document.destroy({ where: { ticketId } });
 
-    // Delete ticket
     await ticket.destroy();
 
     res.json({ message: 'Ticket deleted successfully' });
