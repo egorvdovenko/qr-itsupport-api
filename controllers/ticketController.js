@@ -1,6 +1,7 @@
 const Ticket = require('../models/ticket');
 const Document = require('../models/document');
 const Device = require('../models/device');
+const User = require('../models/user');
 
 const getAllTickets = async (req, res) => {
   try {
@@ -49,21 +50,22 @@ const createTicket = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the device with the given deviceId exists
-    const device = await Device.findByPk(deviceId);
-    if (!device) {
-      return res.status(404).json({ error: 'Device not found' });
+    if (deviceId) {
+      const device = await Device.findByPk(deviceId);
+      if (!device) {
+        return res.status(404).json({ error: 'Device not found' });
+      }
     }
 
     const newTicket = await Ticket.create({
       title,
       description,
-      deviceId,
       isDone: !!isDone,
       userId,
+      deviceId: deviceId || null,
     });
 
-    // Create associated documents
+    // Create associated documents if documents are provided
     if (documents && documents.length > 0) {
       const createdDocuments = await Document.bulkCreate(
         documents.map((doc) => ({ ...doc, ticketId: newTicket.id }))
@@ -91,10 +93,11 @@ const updateTicket = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the device with the given deviceId exists
-    const device = await Device.findByPk(deviceId);
-    if (!device) {
-      return res.status(404).json({ error: 'Device not found' });
+    if (deviceId) {
+      const device = await Device.findByPk(deviceId);
+      if (!device) {
+        return res.status(404).json({ error: 'Device not found' });
+      }
     }
 
     const ticket = await Ticket.findByPk(ticketId, { include: 'documents' });
@@ -105,12 +108,12 @@ const updateTicket = async (req, res) => {
 
     ticket.title = title;
     ticket.description = description;
-    ticket.deviceId = deviceId;
     ticket.isDone = !!isDone;
     ticket.userId = userId;
+    ticket.deviceId = deviceId || null;
     await ticket.save();
 
-    // Update associated documents
+    // Update associated documents if documents are provided
     if (documents && documents.length > 0) {
       await Document.destroy({ where: { ticketId } });
 
