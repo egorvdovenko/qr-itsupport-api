@@ -5,11 +5,13 @@ const User = require('../models/user');
 
 const getAllTickets = async (req, res) => {
   try {
-    const { page = 1, pageSize = 10 } = req.query;
+    const { userId, page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
 
+    const whereClause = userId ? { userId } : {}; // Add userId to the where clause if provided
+
     const { count, rows: tickets } = await Ticket.findAndCountAll({
-      include: ['documents', 'device'],
+      where: whereClause,
       limit: parseInt(pageSize),
       offset: parseInt(offset),
     });
@@ -27,7 +29,7 @@ const getAllTickets = async (req, res) => {
 const getTicketById = async (req, res) => {
   try {
     const ticketId = parseInt(req.params.id);
-    const ticket = await Ticket.findByPk(ticketId, { include: ['documents', 'device'] });
+    const ticket = await Ticket.findByPk(ticketId);
 
     if (!ticket) {
       return res.status(404).json({ error: 'Ticket not found' });
@@ -39,6 +41,25 @@ const getTicketById = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const getTicketByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const ticket = await Ticket.findOne({
+      where: { userId },
+    });
+
+    if (!ticket) {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+
+    res.json(ticket);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 const createTicket = async (req, res) => {
   try {
@@ -100,7 +121,7 @@ const updateTicket = async (req, res) => {
       }
     }
 
-    const ticket = await Ticket.findByPk(ticketId, { include: 'documents' });
+    const ticket = await Ticket.findByPk(ticketId);
 
     if (!ticket) {
       return res.status(404).json({ error: 'Ticket not found' });
@@ -156,6 +177,7 @@ const deleteTicket = async (req, res) => {
 module.exports = {
   getAllTickets,
   getTicketById,
+  getTicketByUserId,
   createTicket,
   updateTicket,
   deleteTicket,
