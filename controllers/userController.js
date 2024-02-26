@@ -9,10 +9,6 @@ const getAllUsers = async (req, res) => {
 
     const { count, rows: users } = await User.findAndCountAll({
       attributes: { exclude: ['password'] },
-      include: [
-        { model: Ticket, as: 'tickets' },
-        { model: Service, as: 'service' },
-      ],
       limit: parseInt(pageSize),
       offset: parseInt(offset),
     });
@@ -32,10 +28,6 @@ const getUserById = async (req, res) => {
   try {
     const user = await User.findByPk(userId, {
       attributes: { exclude: ['password'] },
-      include: [
-        { model: Ticket, as: 'tickets' },
-        { model: Service, as: 'service' },
-      ],
     });
     if (user) {
       res.json(user);
