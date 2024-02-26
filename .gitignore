@@ -131,5 +131,6 @@ dist
 
 # project
 schema.sql
+database.sqlite
 certificate.pem
 private-key.pem
