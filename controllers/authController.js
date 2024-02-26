@@ -2,7 +2,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const registerUser = async (req, res) => {
+const secretKey = process.env.SECRET_KEY;
+
+function generateToken(user) {
+  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '15m' });
+}
+
+function generateRefreshToken(user) {
+  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '7d' });
+}
+
+const register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -20,32 +30,60 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find the user by email
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
     const user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Compare the provided password with the stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const token = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
 
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    // Generate a JWT token for authentication
-    const token = jwt.sign({ userId: user.id }, 'your_secret_key', { expiresIn: '1h' });
-
-    res.json({ token });
-  } catch (err) {
-    console.error(err);
+    res.json({ token, refreshToken });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-module.exports = { registerUser, loginUser };
+const logout = async (req, res) => {
+  res.json({ message: 'Logged out successfully' });
+}
+
+const refresh = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ error: 'Refresh token not provided' });
+    }
+
+    jwt.verify(refreshToken, secretKey, (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: 'Invalid refresh token' });
+      }
+
+      const token = generateToken(user);
+
+      res.json({ token });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+module.exports = { 
+  register, 
+  login, 
+  logout,
+  refresh
+};

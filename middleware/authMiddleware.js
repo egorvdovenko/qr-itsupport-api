@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+const secretKey = process.env.SECRET_KEY;
+
 const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization');
 
@@ -8,10 +10,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    // Verify the token
-    const decoded = jwt.verify(token, 'your_secret_key');
-
-    // Attach the user ID to the request for further use
+    const decoded = jwt.verify(token.split(' ')[1], secretKey);
     req.user = { userId: decoded.userId };
 
     next();
