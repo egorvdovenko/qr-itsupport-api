@@ -2,10 +2,13 @@ const Document = require('../models/document');
 
 const getAllDocuments = async (req, res) => {
   try {
-    const { page = 1, pageSize = 10 } = req.query;
+    const { ticketId, page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
 
+    const whereClause = ticketId ? { ticketId } : {}; // Add ticketId to the where clause if provided
+
     const { count, rows: documents } = await Document.findAndCountAll({
+      where: whereClause,
       limit: parseInt(pageSize),
       offset: parseInt(offset),
     });
