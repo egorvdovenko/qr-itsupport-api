@@ -65,7 +65,6 @@ const createTicket = async (req, res) => {
   try {
     const { title, description, deviceId, documents, isDone, userId } = req.body;
 
-    // Check if the user with the given userId exists
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -108,7 +107,6 @@ const updateTicket = async (req, res) => {
     const ticketId = parseInt(req.params.id);
     const { title, description, deviceId, documents, isDone, userId } = req.body;
 
-    // Check if the user with the given userId exists
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -134,16 +132,22 @@ const updateTicket = async (req, res) => {
     ticket.deviceId = deviceId || null;
     await ticket.save();
 
-    // Update associated documents if documents are provided
-    if (documents && documents.length > 0) {
+    // Update associated documents
+    if (documents) {
+      // Remove all existing documents associated with the ticket
       await Document.destroy({ where: { ticketId } });
 
-      const createdDocuments = await Document.bulkCreate(
-        documents.map((doc) => ({ ...doc, ticketId }))
-      );
+      if (documents.length > 0) {
+        // Create and associate new documents if documents array is not empty
+        const createdDocuments = await Document.bulkCreate(
+          documents.map((doc) => ({ ...doc, ticketId }))
+        );
 
-      // Associate the updated documents with the ticket
-      await ticket.setDocuments(createdDocuments);
+        await ticket.setDocuments(createdDocuments);
+      }
+    } else {
+      // If documents array is not provided, remove all existing documents
+      await Document.destroy({ where: { ticketId } });
     }
 
     res.json(ticket);
