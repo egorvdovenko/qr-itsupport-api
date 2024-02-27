@@ -1,6 +1,8 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
 const { sequelize } = require('../sequelize');
+
 const User = require('../models/user');
 const Ticket = require('../models/ticket');
 const Device = require('../models/device');
@@ -11,14 +13,20 @@ module.exports = {
     // Seed users into the database
     const users = await User.bulkCreate([
       {
-        email: 'user1@example.com',
-        password: 'password1',
-        phoneNumber: '1234567890',
+        email: 'admin@example.com',
+        password: await bcrypt.hash('admin', 10),
+        phoneNumber: '9182736450',
         isConfirmed: true,
       },
       {
+        email: 'user1@example.com',
+        password: await bcrypt.hash('password1', 10),
+        phoneNumber: '1234567890',
+        isConfirmed: false,
+      },
+      {
         email: 'user2@example.com',
-        password: 'password2',
+        password: await bcrypt.hash('password2', 10),
         phoneNumber: '9876543210',
         isConfirmed: false,
       },

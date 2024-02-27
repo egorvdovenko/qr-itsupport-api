@@ -44,10 +44,14 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    if (!user.isConfirmed) {
+      return res.status(401).json({ error: 'User is not confirmed' });
+    }
+
     const token = generateToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    res.json({ token, refreshToken });
+    res.json({ user, token, refreshToken });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
