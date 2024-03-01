@@ -77,7 +77,7 @@ const refresh = async (req, res) => {
 
       const token = generateToken(user);
 
-      res.json({ token });
+      res.json({ token, refreshToken });
     });
   } catch (error) {
     console.error(error);
