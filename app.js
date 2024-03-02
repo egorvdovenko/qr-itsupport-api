@@ -15,12 +15,18 @@ const ticketRoutes = require('./routes/ticketRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 
 const app = express();
+
 const port = process.env.PORT || 8000;
+const host = process.env.HOST || '0.0.0.0';
 
 app.use(cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+app.get('/', (req, res) => {
+  res.send('Server is running!')
+})
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -40,6 +46,6 @@ async function initializeDatabase() {
 
 initializeDatabase();
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(port, host, () => {
+  console.log(`Server is running on http://${host}:${port}`);
 });
