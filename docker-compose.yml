@@ -5,6 +5,3 @@ services:
     container_name: qr-itsupport-api
     ports:
       - "8000:8000"
-    environment:
-      - ENVIRONMENT=production
-      - SECRET_KEY=f2b3628d0a1ec51b691cf159b98f134bb8cf9747cf49a3d284c2190e266f35ef
