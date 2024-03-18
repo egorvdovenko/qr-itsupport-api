@@ -5,9 +5,9 @@ const ticketController = require('../controllers/ticketController');
 
 const router = express.Router();
 
-router.get('/', [authMiddleware, roleMiddleware], ticketController.getAllTickets);
-router.get('/:id', [authMiddleware, roleMiddleware], ticketController.getTicketById);
-router.get('/byUserId/:userId', [authMiddleware, roleMiddleware], ticketController.getTicketByUserId);
+router.get('/', [authMiddleware], ticketController.getAllTickets);
+router.get('/:id', [authMiddleware], ticketController.getTicketById);
+router.get('/byUserId/:userId', [authMiddleware], ticketController.getTicketByUserId);
 router.post('/', [authMiddleware], ticketController.createTicket);
 router.put('/:id', [authMiddleware, roleMiddleware], ticketController.updateTicket);
 router.delete('/:id', [authMiddleware, roleMiddleware], ticketController.deleteTicket);

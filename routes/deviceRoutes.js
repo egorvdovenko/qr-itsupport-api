@@ -5,7 +5,7 @@ const deviceController = require('../controllers/deviceController');
 
 const router = express.Router();
 
-router.get('/', [authMiddleware, roleMiddleware], deviceController.getAllDevices);
+router.get('/', [authMiddleware], deviceController.getAllDevices);
 router.get('/:id', [authMiddleware], deviceController.getDeviceById);
 router.get('/byInventoryNumber/:inventoryNumber', [authMiddleware], deviceController.getDeviceByInventoryNumber);
 router.post('/', [authMiddleware, roleMiddleware], deviceController.createDevice);

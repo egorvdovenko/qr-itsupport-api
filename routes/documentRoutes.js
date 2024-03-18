@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', [authMiddleware, roleMiddleware], documentController.getAllDocuments);
 router.get('/:id', [authMiddleware, roleMiddleware], documentController.getDocumentById);
-router.post('/', [authMiddleware], documentController.createDocument);
+router.post('/', [authMiddleware, roleMiddleware], documentController.createDocument);
 router.put('/:id', [authMiddleware, roleMiddleware], documentController.updateDocument);
 router.delete('/:id', [authMiddleware, roleMiddleware], documentController.deleteDocument);
 
