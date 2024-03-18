@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const Ticket = require('../models/ticket');
 const Service = require('../models/service');
 
 const getAllUsers = async (req, res) => {
@@ -41,12 +40,13 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { email, phoneNumber, isConfirmed, serviceId } = req.body;
+  const { email, phoneNumber, isConfirmed, serviceId, role } = req.body;
   try {
     const newUser = await User.create({
       email,
       phoneNumber,
       isConfirmed,
+      role,
     });
 
     if (serviceId) {
@@ -65,13 +65,14 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = parseInt(req.params.id);
-  const { email, phoneNumber, isConfirmed, serviceId } = req.body;
+  const { email, phoneNumber, isConfirmed, serviceId, role } = req.body;
   try {
     const user = await User.findByPk(userId);
     if (user) {
       user.email = email;
       user.phoneNumber = phoneNumber;
       user.isConfirmed = isConfirmed;
+      user.role = role;
       await user.save();
 
       if (serviceId) {

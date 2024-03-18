@@ -1,15 +1,16 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const UserRole = require('../enums/userRole');
 
 const secretKey = process.env.SECRET_KEY;
 
 function generateToken(user) {
-  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '15m' });
+  return jwt.sign({ userId: user.id, userRole: user.role }, secretKey, { expiresIn: '15m' });
 }
 
 function generateRefreshToken(user) {
-  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '7d' });
+  return jwt.sign({ userId: user.id, userRole: user.role }, secretKey, { expiresIn: '7d' });
 }
 
 const register = async (req, res) => {
@@ -21,6 +22,7 @@ const register = async (req, res) => {
     const newUser = await User.create({
       email,
       password: hashedPassword,
+      role: UserRole.USER
     });
 
     res.status(201).json(newUser);

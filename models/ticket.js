@@ -16,6 +16,7 @@ const Ticket = sequelize.define('Ticket', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  // TODO: think about states
   isDone: {
     type: DataTypes.BOOLEAN,
     allowNull: false,

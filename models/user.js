@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../sequelize');
 const Ticket = require('./ticket');
+const UserRole = require('../enums/userRole');
 
 const User = sequelize.define('User', {
   id: {
@@ -28,6 +29,12 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
+  },
+  // TODO: to think about type
+  role: {
+    type: DataTypes.ENUM(Object.values(UserRole)),
+    allowNull: false,
+    defaultValue: UserRole.USER,
   },
 });
 

@@ -30,6 +30,10 @@ const createDocument = async (req, res) => {
       title,
       base64String,
     });
+
+    // TODO: think about base64String storing
+    // TODO: think about secure access
+
     res.status(201).json(newDocument);
   } catch (err) {
     console.error(err);

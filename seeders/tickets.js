@@ -8,6 +8,8 @@ const Ticket = require('../models/ticket');
 const Device = require('../models/device');
 const Service = require('../models/service');
 
+const UserRole = require('../enums/userRole');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Seed users into the database
@@ -17,18 +19,21 @@ module.exports = {
         password: await bcrypt.hash('admin', 10),
         phoneNumber: '9182736450',
         isConfirmed: true,
+        role: UserRole.ADMIN
       },
       {
         email: 'user1@example.com',
         password: await bcrypt.hash('password1', 10),
         phoneNumber: '1234567890',
         isConfirmed: false,
+        role: UserRole.USER
       },
       {
         email: 'user2@example.com',
         password: await bcrypt.hash('password2', 10),
         phoneNumber: '9876543210',
         isConfirmed: false,
+        role: UserRole.USER
       },
     ]);
 
