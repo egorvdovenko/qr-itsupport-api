@@ -3,14 +3,18 @@ const Service = require('../models/service');
 
 const getAllUsers = async (req, res) => {
   try {
-    const { page = 1, pageSize = 10 } = req.query;
-    const offset = (page - 1) * pageSize;
+    const { page, pageSize } = req.query;
 
-    const { count, rows: users } = await User.findAndCountAll({
+    let options = {
       attributes: { exclude: ['password'] },
-      limit: parseInt(pageSize),
-      offset: parseInt(offset),
-    });
+    };
+    if (page && pageSize) {
+      const offset = (page - 1) * pageSize;
+      options.limit = parseInt(pageSize);
+      options.offset = parseInt(offset);
+    }
+
+    const { count, rows: users } = await User.findAndCountAll(options);
 
     res.json({
       totalItems: count,

@@ -2,13 +2,16 @@ const Device = require('../models/device');
 
 const getAllDevices = async (req, res) => {
   try {
-    const { page = 1, pageSize = 10 } = req.query;
-    const offset = (page - 1) * pageSize;
+    const { page, pageSize } = req.query;
 
-    const { count, rows: devices } = await Device.findAndCountAll({
-      limit: parseInt(pageSize),
-      offset: parseInt(offset),
-    });
+    let options = {};
+    if (page && pageSize) {
+      const offset = (page - 1) * pageSize;
+      options.limit = parseInt(pageSize);
+      options.offset = parseInt(offset);
+    }
+
+    const { count, rows: devices } = await Device.findAndCountAll(options);
 
     res.json({
       totalItems: count,

@@ -5,8 +5,7 @@ const User = require('../models/user');
 
 const getAllTickets = async (req, res) => {
   try {
-    const { userId, page = 1, pageSize = 10, includeDevice, includeDocuments } = req.query;
-    const offset = (page - 1) * pageSize;
+    const { userId, page, pageSize, includeDevice, includeDocuments } = req.query;
 
     const whereClause = userId ? { userId } : {};
 
@@ -18,12 +17,18 @@ const getAllTickets = async (req, res) => {
       include.push({ model: Document, as: 'documents' });
     }
 
-    const { count, rows: tickets } = await Ticket.findAndCountAll({
+    let options = {
       where: whereClause,
-      limit: parseInt(pageSize),
-      offset: parseInt(offset),
       include: include,
-    });
+    };
+
+    if (page && pageSize) {
+      const offset = (page - 1) * pageSize;
+      options.limit = parseInt(pageSize);
+      options.offset = parseInt(offset);
+    }
+
+    const { count, rows: tickets } = await Ticket.findAndCountAll(options);
 
     res.json({
       totalItems: count,
