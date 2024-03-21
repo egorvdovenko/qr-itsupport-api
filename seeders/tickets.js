@@ -1,7 +1,6 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
-const { sequelize } = require('../sequelize');
 
 const User = require('../models/user');
 const Ticket = require('../models/ticket');
@@ -11,6 +10,7 @@ const Service = require('../models/service');
 const UserRole = require('../enums/userRole');
 
 module.exports = {
+  // eslint-disable-next-line no-unused-vars
   up: async (queryInterface, Sequelize) => {
     // Seed users into the database
     const users = await User.bulkCreate([
@@ -86,6 +86,7 @@ module.exports = {
     ]);
   },
 
+  // eslint-disable-next-line no-unused-vars
   down: async (queryInterface, Sequelize) => {
     await Ticket.destroy({ where: {} });
     await User.destroy({ where: {} });

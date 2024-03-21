@@ -73,7 +73,7 @@ const updateDevice = async (req, res) => {
     if (device) {
       device.title = title;
       device.inventoryNumber = inventoryNumber;
-      device.location = location
+      device.location = location;
       await device.save();
       res.json(device);
     } else {

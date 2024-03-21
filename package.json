@@ -7,7 +7,9 @@
     "start": "node ./app.js",
     "serve": "nodemon ./app.js",
     "db:seed:all": "npx sequelize-cli db:seed:all",
-    "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all"
+    "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
     "nodemon": "^3.0.3"
   }
 }

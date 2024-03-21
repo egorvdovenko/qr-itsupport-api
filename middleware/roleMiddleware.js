@@ -1,4 +1,4 @@
-const UserRole = require('../enums/userRole')
+const UserRole = require('../enums/userRole');
 
 const roleMiddleware = (req, res, next) => {
   if (req.user.userRole !== UserRole.ADMIN) {
@@ -6,6 +6,6 @@ const roleMiddleware = (req, res, next) => {
   } else {
     next();
   }
-}
+};
 
 module.exports = roleMiddleware;

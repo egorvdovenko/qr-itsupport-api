@@ -1,3 +1,4 @@
+const process = require('process');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -62,7 +63,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   res.json({ message: 'Logged out successfully' });
-}
+};
 
 const refresh = async (req, res) => {
   try {
@@ -85,7 +86,7 @@ const refresh = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
 module.exports = { 
   register, 

@@ -68,7 +68,7 @@ const getTicketByUserId = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
 const createTicket = async (req, res) => {
   try {
