@@ -34,20 +34,20 @@ npm start
 
 The application's routes are organized into separate modules for authentication, users, devices, documents, tickets, and services. The project also includes seeders for populating the database with initial data for users, devices, and tickets.
 
-### Authentication
+#### Authentication
 - POST /api/auth/login
 - POST /api/auth/register
 - POST /api/auth/confirm
 - POST /api/auth/resend
 
-### Users
+#### Users
 - GET /api/users
 - GET /api/users/:id
 - POST /api/users
 - PUT /api/users/:id
 - DELETE /api/users/:id
 
-### Devices
+#### Devices
 - GET /api/devices
 - GET /api/devices/:id
 - GET /api/devices/byInventoryNumber/:inventoryNumber
@@ -55,14 +55,14 @@ The application's routes are organized into separate modules for authentication,
 - PUT /api/devices/:id
 - DELETE /api/devices/:id
 
-### Documents
+#### Documents
 - GET /api/documents
 - GET /api/documents/:id
 - POST /api/documents
 - PUT /api/documents/:id
 - DELETE /api/documents/:id
 
-### Tickets
+#### Tickets
 - GET /api/tickets
 - GET /api/tickets/:id
 - GET /api/tickets/byUserId/:userId
@@ -70,7 +70,7 @@ The application's routes are organized into separate modules for authentication,
 - PUT /api/tickets/:id
 - DELETE /api/tickets/:id
 
-### Services
+#### Services
 - GET /api/services
 - GET /api/services/:id
 - POST /api/services
