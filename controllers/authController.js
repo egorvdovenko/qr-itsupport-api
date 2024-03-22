@@ -73,12 +73,12 @@ const refresh = async (req, res) => {
       return res.status(401).json({ error: 'Refresh token not provided' });
     }
 
-    jwt.verify(refreshToken, secretKey, (err, user) => {
+    jwt.verify(refreshToken, secretKey, (err, decoded) => {
       if (err) {
         return res.status(403).json({ error: 'Invalid refresh token' });
       }
 
-      const token = generateToken(user);
+      const token = generateToken({ id: decoded.userId, role: decoded.userRole});
 
       res.json({ token, refreshToken });
     });
