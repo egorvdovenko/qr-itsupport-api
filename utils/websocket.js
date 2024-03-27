@@ -10,4 +10,4 @@ wss.on('connection', function connection(ws) {
   });
 });
 
-module.exports = wss;
+module.exports = { wss };

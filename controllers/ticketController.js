@@ -2,9 +2,8 @@ const Ticket = require('../models/ticket');
 const Document = require('../models/document');
 const Device = require('../models/device');
 const User = require('../models/user');
-
-// Import WebSocket server from utils/websocket.js
-const wss = require('../utils/websocket');
+const WebSocket = require('ws');
+const { wss } = require('../utils/websocket');
 
 const getAllTickets = async (req, res) => {
   try {
