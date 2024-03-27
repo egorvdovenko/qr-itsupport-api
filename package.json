@@ -29,7 +29,8 @@
     "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "sequelize": "^6.37.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "ws": "^7.5.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

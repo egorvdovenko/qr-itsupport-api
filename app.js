@@ -1,6 +1,7 @@
 const process = require('process');
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -16,6 +17,7 @@ const ticketRoutes = require('./routes/ticketRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 
 const app = express();
+const server = http.createServer(app); // Create HTTP server
 
 const port = process.env.PORT || 8000;
 const host = process.env.HOST || '0.0.0.0';
@@ -47,6 +49,6 @@ async function initializeDatabase() {
 
 initializeDatabase();
 
-app.listen(port, host, () => {
+server.listen(port, host, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });

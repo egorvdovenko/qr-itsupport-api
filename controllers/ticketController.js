@@ -3,6 +3,9 @@ const Document = require('../models/document');
 const Device = require('../models/device');
 const User = require('../models/user');
 
+// Import WebSocket server from utils/websocket.js
+const wss = require('../utils/websocket');
+
 const getAllTickets = async (req, res) => {
   try {
     const { userId, page, pageSize, includeDevice, includeDocuments } = req.query;
@@ -109,6 +112,13 @@ const createTicket = async (req, res) => {
       await newTicket.setDocuments(createdDocuments);
     }
 
+    // Notify all connected clients about the new ticket
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'ticket_created', data: newTicket }));
+      }
+    });
+
     res.status(201).json(newTicket);
   } catch (err) {
     console.error(err);
@@ -163,6 +173,13 @@ const updateTicket = async (req, res) => {
       // If documents array is not provided, remove all existing documents
       await Document.destroy({ where: { ticketId } });
     }
+    
+    // Notify all connected clients about the updated ticket
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'ticket_updated', data: ticket }));
+      }
+    });
 
     res.json(ticket);
   } catch (err) {
