@@ -76,7 +76,3 @@ The application's routes are organized into separate modules for authentication,
 - POST /api/services
 - PUT /api/services/:id
 - DELETE /api/services/:id
-
-## License
-
-This project is licensed under the ISC license.
