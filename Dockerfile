@@ -14,7 +14,6 @@ RUN npm ci
 COPY . .
 
 # Set environment variables
-ENV ENVIRONMENT production
 ENV SECRET_KEY f2b3628d0a1ec51b691cf159b98f134bb8cf9747cf49a3d284c2190e266f35ef
 
 # Expose the app's port
