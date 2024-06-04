@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const broadcastMessage = async (message) => {
   try {
-    const response = await axios.post(`${process.env.WEBSOCKET_SERVER_URL}/broadcast`, {
+    const response = await axios.post(`${process.env.WEBSOCKET_API_URL}/broadcast`, {
       message
     });
     return response.data;
