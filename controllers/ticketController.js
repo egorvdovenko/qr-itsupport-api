@@ -2,8 +2,7 @@ const Ticket = require('../models/ticket');
 const Document = require('../models/document');
 const Device = require('../models/device');
 const User = require('../models/user');
-const WebSocket = require('ws');
-const { wss } = require('../utils/websocket');
+const { broadcastMessage } = require('../utils/websocket');
 
 const getAllTickets = async (req, res) => {
   try {
@@ -111,12 +110,8 @@ const createTicket = async (req, res) => {
       await newTicket.setDocuments(createdDocuments);
     }
 
-    // Notify all connected clients about the new ticket
-    wss.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'ticket_created', data: newTicket }));
-      }
-    });
+    // Use the broadcastMessage function to notify all connected clients
+    broadcastMessage({ type: 'ticket_created', data: newTicket });
 
     res.status(201).json(newTicket);
   } catch (err) {
@@ -173,12 +168,8 @@ const updateTicket = async (req, res) => {
       await Document.destroy({ where: { ticketId } });
     }
     
-    // Notify all connected clients about the updated ticket
-    wss.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'ticket_updated', data: ticket }));
-      }
-    });
+    // Use the broadcastMessage function to notify all connected clients
+    broadcastMessage({ type: 'ticket_updated', data: ticket });
 
     res.json(ticket);
   } catch (err) {

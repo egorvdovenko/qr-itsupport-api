@@ -1,13 +1,18 @@
-const WebSocket = require('ws');
+const process = require('process');
+const axios = require('axios');
 
-const wss = new WebSocket.Server({ port: 8040 });
+const broadcastMessage = async (message) => {
+  try {
+    const response = await axios.post(`${process.env.WEBSOCKET_SERVER_URL}/broadcast`, {
+      message
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error broadcasting message to WebSocket server:', error);
+    throw error;
+  }
+};
 
-wss.on('connection', function connection(ws) {
-  console.log('WebSocket client connected');
-
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
-});
-
-module.exports = { wss };
+module.exports = {
+  broadcastMessage
+};
